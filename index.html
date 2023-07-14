@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto Final - E-Commerce BotinGold</title>
+    <meta name="title" content="JS Proyecto Final - E-Commerce BotinGold" />
+    <meta name="description" content="BotinGold - Te invito a conocer esta pagina web acerca de los ultimos Botines del Mundo - Hoy en dia sabemos que comprar un botin no es una tarea facil, pero aca en BotinGold lo hacemos asi, tendras todas las posibilidades y comodidades para acceder a tu Botin Ideal."/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Belanosima:wght@600&display=swap" rel="stylesheet"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400&display=swap" rel="stylesheet"/>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <link rel="E-Commerce BotinGold" href="multimedia/logoBotinGold.png" />
+</head>
+
+<body id="miBody">
+    <div>
+        <header class="header">
+            <img src="./multimedia/logoBotinGold.png" alt="logoBotinGold" />
+            <h1 data-aos="flip-up"><span>Botingold</span>: Compra de Botines</h1>
+            <img class="botinOro" src="multimedia/botingold.png" alt="Imagen Bota de Oro"/>
+        </header>
+        <main class="principal">
+            <div class="bienvenido">
+                <div id="usuario">
+                    <input type="text" id="textLogin" class="menuInput" placeholder="Usuario: santigui2003"/>
+                    <button id="botonLogin" class="menuBoton">Log In</button>
+                </div>
+                <div id="usuarioIngresado"></div>
+            </div>
+            <div class="menu">
+                <button class="menuBoton" id="botonProductos">Lista de Botines</button>
+                <button class="menuBoton" id="botonCarrito">Carrito de Compras</button>
+                <button class="menuFiltro" value="adidas">Botines Adidas</button>
+                <button class="menuFiltro" value="nike">Botines Nike</button>
+                <input class="menuInput" id="buscador" placeholder="Ingrese nombre del producto"/>
+            </div>
+            <div id="contenedorCarrito" class="oculto">
+                <div id="carrito"></div>
+                <button id="finalizarCompra">Finalizar Compra</button>
+            </div>
+            <div id="inicio">
+                <h2>Los mejores botines en <span>BOTINGOLD</span></h2>
+                <p>Desde 1989 somos una empresa dedicada a la importacion de los mejores botines del mundo. Nos caracteriza el profesionalismo y la eficacia a la hora de elegir tu mejor botin.</p>
+                <img src="./multimedia/botinesinicio.png" alt="foto copada" />
+            </div>
+            <div id="base">
+                <div id="productos">
+                    <div id="contenedor"></div>
+                </div>
+            </div>
+        </main>
+        <footer class="footer">
+            <div class="redesociales">
+                <ul>
+                    <li>
+                        <a href="#">
+                            <img src="multimedia/facebooklogo.png" alt="Logo facebook" />
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="multimedia/instagramlogo.png" alt="Logo Instagram" />
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="multimedia/twitterlogo.png" alt="Logo Twitter" />
+                        </a>
+                    </li>
+                </ul>
+                <p>Copyright © 1989-2023 Botingold S.R.L.</p>
+            </div>
+        </footer>
+    </div>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="./script.js"></script>
+</body>
+</html>
