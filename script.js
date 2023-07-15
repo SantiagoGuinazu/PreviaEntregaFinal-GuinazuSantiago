@@ -3,17 +3,101 @@ console.log("JS Proyecto Final - Guiñazu Santiago")
 
 //E-commerce: Botingold - Compra y venta de Botines
 
-//Usuarios
-let usuarios = [
-    { usuario: "santigui2003", id: 100, nombre: "Santiago", apellido: "Guiñazu", foto: "usuario1.png"},
-    { usuario: "gustagui2003", id: 101, nombre: "Gustavo", apellido: "Guiñazu", foto: "usuario2.png"},
-    { usuario: "pauligui2003", id: 102, nombre: "Paula", apellido: "Guiñazu", foto: "usuario3.png"},
-]
+//Inicio miPromgramaPrincipal
+miProgramaPrincipal()
 
-//Ingreso Usuario
-let botonLogin = document.getElementById("botonLogin")
-botonLogin.addEventListener("click", mostrarBienvenida)
 
+//Funcion Inicio miPromgramaPrincipal
+function miProgramaPrincipal() {
+    
+    //DB Usuarios
+    let usuarios = [
+        { usuario: "santigui2003", id: 100, nombre: "Santiago", apellido: "Guiñazu", foto: "usuario1.png"},
+        { usuario: "gustagui2003", id: 101, nombre: "Gustavo", apellido: "Guiñazu", foto: "usuario2.png"},
+        { usuario: "pauligui2003", id: 102, nombre: "Paula", apellido: "Guiñazu", foto: "usuario3.png"},
+    ]
+
+    //DB Productos
+    let productos = [
+        { id: 1, nombre: "predator", marca: "adidas", color: "blanco", tapones: "bajos", stock: 4, precio: 15000, rutaImagen: "botin1.png" },
+        { id: 2, nombre: "copa", marca: "adidas", color: "negro", tapones: "intermedios", stock: 1, precio: 26000, rutaImagen: "botin2.png" },
+        { id: 3, nombre: "mercurial", marca: "nike", color: "negro", tapones: "bajos", stock: 7, precio: 22000, rutaImagen: "botin3.png" },
+        { id: 4, nombre: "vapor", marca: "nike", color: "blanco", tapones: "intermedios", stock: 5, precio: 8000, rutaImagen: "botin4.png" },
+        { id: 5, nombre: "tiempo", marca: "nike", color: "blanco", tapones: "bajos", stock: 1, precio: 8000, rutaImagen: "botin5.png" },
+        { id: 6, nombre: "x", marca: "adidas", color: "negro", tapones: "altos", stock: 8, precio: 7500, rutaImagen: "botin6.png" },
+        { id: 7, nombre: "copa pro", marca: "adidas", color: "blanco", tapones: "bajos", stock: 4, precio: 3500, rutaImagen: "botin7.png" },
+        { id: 8, nombre: "phantom", marca: "nike", color: "negro", tapones: "altos", stock: 5, precio: 20000, rutaImagen: "botin8.png" },
+        { id: 9, nombre: "pro copa", marca: "adidas", color: "blanco", tapones: "intermedios", stock: 9, precio: 17000, rutaImagen: "botin9.png" },
+        { id: 10, nombre: "superfly", marca: "nike", color: "negro", tapones: "altos", stock: 2, precio: 9600, rutaImagen: "botin10.png" },
+        { id: 11, nombre: "speedflow", marca: "adidas", color: "blanco", tapones: "intermedios", stock: 10, precio: 17600, rutaImagen: "botin11.png" },
+        { id: 12, nombre: "phantom", marca: "nike", color: "negro", tapones: "altos", stock: 3, precio: 12300, rutaImagen: "botin12.png" },
+        { id: 13, nombre: "superfly", marca: "nike", color: "blanco", tapones: "bajos", stock: 5, precio: 29000, rutaImagen: "botin13.png" },
+        { id: 14, nombre: "ghosted", marca: "adidas", color: "blanco", tapones: "altos", stock: 2, precio: 35000, rutaImagen: "botin14.png" },
+        { id: 15, nombre: "mercurial", marca: "nike", color: "negro", tapones: "intermedios", stock: 15, precio: 17000, rutaImagen: "botin15.png" },
+        { id: 16, nombre: "vapor", marca: "nike", color: "negro", tapones: "bajos", stock: 7, precio: 15200, rutaImagen: "botin16.png" },
+    ]
+
+    let carrito = JSON.parse(localStorage.getItem("carrito")) || []
+    let contenedor = document.getElementById("productos")
+
+    //Marcas
+    let marca = []
+    for (let producto of productos) {
+        if (!marca.includes(producto.marca)) {
+            marca.push(producto.marca)
+        }
+    }
+
+    //1 - Ingreso Usuario
+    let botonLogin = document.getElementById("botonLogin")
+    botonLogin.addEventListener("click", mostrarBienvenida)
+
+    //2 - Lista productos
+    let botonProductos = document.getElementById("botonProductos")
+    botonProductos.addEventListener("click", listaCompleta)
+
+    //3 - Filtro para Adidas y Nike
+    let botonesFiltros = document.getElementsByClassName("menuFiltro")
+    for (let botonFiltro of botonesFiltros) {
+        botonFiltro.addEventListener("click", filtrarYRenderizarPorMarca)
+    }
+
+    //4 - Buscador general
+    let buscador = document.getElementById("buscador")
+    buscador.addEventListener("input", filtrar)
+
+    //5 - Tarjetas para carrito
+    crearTarjetas(productos, contenedor)
+
+    //6 - Agregar al Carrito - Funcion Interna
+
+    //7 - Renderizar Carrito
+    renderizarCarrito(carrito)
+
+    //8 - Boton Carrito
+    let botonCarrito = document.getElementById("botonCarrito")
+    botonCarrito.addEventListener("click", mostrarOcultar)
+
+    //9 - Boton Lista productos e Inicio
+    let botonListaBotines = document.getElementById("botonProductos")
+    botonListaBotines.addEventListener("click", mostrarOcultarLista)
+
+    //10 - Finalizar Compra
+    let botonFinalizarCompra = document.getElementById("finalizarCompra")
+    botonFinalizarCompra.addEventListener("click", () => finalizarCompra(carrito))
+
+    //11 - Funcion Interna SweetAlerts
+    
+    //12 - Funcion Interna Toastify
+
+}
+
+
+
+
+
+
+//1 - Ingreso Usuario
 function mostrarBienvenida() {
     let textLogin = document.getElementById("textLogin")
     let usuarioIngresado = document.getElementById("usuarioIngresado")
@@ -34,45 +118,7 @@ function mostrarBienvenida() {
 }
 
 
-//Productos
-let productos = [
-    { id: 1, nombre: "predator", marca: "adidas", color: "blanco", tapones: "bajos", stock: 4, precio: 15000, rutaImagen: "botin1.png" },
-    { id: 2, nombre: "copa", marca: "adidas", color: "negro", tapones: "intermedios", stock: 1, precio: 26000, rutaImagen: "botin2.png" },
-    { id: 3, nombre: "mercurial", marca: "nike", color: "negro", tapones: "bajos", stock: 7, precio: 22000, rutaImagen: "botin3.png" },
-    { id: 4, nombre: "vapor", marca: "nike", color: "blanco", tapones: "intermedios", stock: 5, precio: 8000, rutaImagen: "botin4.png" },
-    { id: 5, nombre: "tiempo", marca: "nike", color: "blanco", tapones: "bajos", stock: 1, precio: 8000, rutaImagen: "botin5.png" },
-    { id: 6, nombre: "x", marca: "adidas", color: "negro", tapones: "altos", stock: 8, precio: 7500, rutaImagen: "botin6.png" },
-    { id: 7, nombre: "copa pro", marca: "adidas", color: "blanco", tapones: "bajos", stock: 4, precio: 3500, rutaImagen: "botin7.png" },
-    { id: 8, nombre: "phantom", marca: "nike", color: "negro", tapones: "altos", stock: 5, precio: 20000, rutaImagen: "botin8.png" },
-    { id: 9, nombre: "pro copa", marca: "adidas", color: "blanco", tapones: "intermedios", stock: 9, precio: 17000, rutaImagen: "botin9.png" },
-    { id: 10, nombre: "superfly", marca: "nike", color: "negro", tapones: "altos", stock: 2, precio: 9600, rutaImagen: "botin10.png" },
-    { id: 11, nombre: "speedflow", marca: "adidas", color: "blanco", tapones: "intermedios", stock: 10, precio: 17600, rutaImagen: "botin11.png" },
-    { id: 12, nombre: "phantom", marca: "nike", color: "negro", tapones: "altos", stock: 3, precio: 12300, rutaImagen: "botin12.png" },
-    { id: 13, nombre: "superfly", marca: "nike", color: "blanco", tapones: "bajos", stock: 5, precio: 29000, rutaImagen: "botin13.png" },
-    { id: 14, nombre: "ghosted", marca: "adidas", color: "blanco", tapones: "altos", stock: 2, precio: 35000, rutaImagen: "botin14.png" },
-    { id: 15, nombre: "mercurial", marca: "nike", color: "negro", tapones: "intermedios", stock: 15, precio: 17000, rutaImagen: "botin15.png" },
-    { id: 16, nombre: "vapor", marca: "nike", color: "negro", tapones: "bajos", stock: 7, precio: 15200, rutaImagen: "botin16.png" },
-]
-
-
-let carrito = JSON.parse(localStorage.getItem("carrito")) || []
-let contenedor = document.getElementById("productos")
-
-crearTarjetas(productos, contenedor)
-renderizarCarrito(carrito)
-
-//Marcas
-let marca = []
-for (let producto of productos) {
-    if (!marca.includes(producto.marca)) {
-        marca.push(producto.marca)
-    }
-}
-
-//Lista productos
-let botonProductos = document.getElementById("botonProductos")
-botonProductos.addEventListener("click", listaCompleta)
-
+//2 - Lista productos
 function listaCompleta(e) {
     e.preventDefault()
     if (e.which === 1) {
@@ -81,29 +127,22 @@ function listaCompleta(e) {
     }
 }
 
-//Filtro para Adidas y Nike
-let botonesFiltros = document.getElementsByClassName("menuFiltro")
-for (let botonFiltro of botonesFiltros) {
-    botonFiltro.addEventListener("click", filtrarYRenderizarPorMarca)
-}
 
+//3 - Filtro para Adidas y Nike
 function filtrarYRenderizarPorMarca(e) {
-    console.log(e)
     let elementosFiltrados = productos.filter(producto => producto.marca === e.target.value)
     crearTarjetas(elementosFiltrados)
 }
 
-//Buscador general
-let buscador = document.getElementById("buscador")
-buscador.addEventListener("input", filtrar)
 
+//4 - Buscador general
 function filtrar() {
     let arrayFiltrado = productos.filter(producto => producto.nombre.includes(buscador.value.toLowerCase()) || producto.marca.includes(buscador.value.toLowerCase()))
     crearTarjetas(arrayFiltrado)
 }
 
 
-//Tarjetas para carrito
+//5 - Tarjetas para carrito
 function crearTarjetas(array) {
     contenedor.innerHTML = ""
     array.forEach(elemento => {
@@ -122,13 +161,12 @@ function crearTarjetas(array) {
     `
         contenedor.appendChild(producto)
         let botonAgregarAlCarrito = document.getElementById(elemento.id)
-        //botonAgregarAlCarrito.addEventListener("click",(e) => console.log(e.target.id)) //mostrar en console el ID
         botonAgregarAlCarrito.addEventListener("click", agregarAlCarrito)
     })
 }
 
 
-//Carrito
+//6 - Agregar a Carrito
 function agregarAlCarrito(e) {
     let productoBuscado = productos.find(producto => producto.id === Number(e.target.id))
     let posicionProductoEnCarrito = carrito.findIndex(producto => producto.id === Number(e.target.id))
@@ -147,12 +185,12 @@ function agregarAlCarrito(e) {
             subtotal: productoBuscado.precio
         })
     }
-    console.log(carrito)
     localStorage.setItem("carrito", JSON.stringify(carrito))
     renderizarCarrito(carrito)
     lanzarTostada()
 }
 
+//7 - Renderizar Carrito
 function renderizarCarrito() {
     let carritoTotal = document.getElementById("carrito")
     carritoTotal.innerHTML = `
@@ -188,9 +226,7 @@ function renderizarCarrito() {
 }
 
 
-//Boton Carrito
-let botonCarrito = document.getElementById("botonCarrito")
-botonCarrito.addEventListener("click", mostrarOcultar)
+//8 - Boton Carrito
 function mostrarOcultar() {
     let contenedorCarrito = document.getElementById("contenedorCarrito")
     let inicio = document.getElementById("inicio")
@@ -199,19 +235,16 @@ function mostrarOcultar() {
 }
 
 
-//Boton Lista productos e Inicio
-let botonListaBotines = document.getElementById("botonProductos")
-botonListaBotines.addEventListener("click", mostrarOcultarLista)
+
+//9 - Boton Lista productos e Inicio
 function mostrarOcultarLista() {
     let inicio = document.getElementById("inicio")
     inicio.classList.add("oculto")
 }
 
 
-//Finalizar Compra
-let botonFinalizarCompra = document.getElementById("finalizarCompra")
-botonFinalizarCompra.addEventListener("click", () => finalizarCompra(carrito))
 
+//10 - Finalizar Compra
 function finalizarCompra() {
     let carritoFisico = document.getElementById("carrito")
     if (carrito != 0) {
@@ -226,11 +259,11 @@ function finalizarCompra() {
 }
 
 
-//SweetAlerts
+//11 - SweetAlerts
 function lanzarAlert() {
     Swal.fire(
-        'BotinGold',
-        `Su compra fue un exito`,
+        'Compra Exitosa!!',
+        `BotinGold - Su compra fue un exito - Recibira su factura al mail`,
         'success',
     )
 }
@@ -238,13 +271,13 @@ function lanzarAlert() {
 function lanzarAlert2() {
     Swal.fire({
         icon: 'error',
-        title: 'Oops...',
+        title: 'Carrito Vacio',
         text: 'No hay nada en el carrito',
         footer: '<a href="index.html">Ir a comprar?</a>',
     })
 }
 
-//Toastify
+//12 - Toastify
 function lanzarTostada() {
     Toastify({
         text: "El producto se agrego al carrito",
