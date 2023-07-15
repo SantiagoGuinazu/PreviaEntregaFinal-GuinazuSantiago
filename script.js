@@ -1,7 +1,7 @@
 //Prueba Live Server
-console.log("JS Proyecto Final - Guiñazu Santiago")
+console.log("Proyecto Final JS - Guiñazu Santiago")
 
-//E-commerce: Botingold - Compra y venta de Botines
+//E-commerce: Botingold - Compra de Botines
 
 //Inicio miPromgramaPrincipal
 miProgramaPrincipal()
@@ -90,11 +90,20 @@ function miProgramaPrincipal() {
     
     //12 - Funcion Interna Toastify
 
+    /*
+    PROXIMO PASO DATAJSON + FETCH THEN CATCH
+    dbJSON()
+
+    function dbJSON() {
+        let dbJSON = "./db.json"
+
+        fetch(dataJSON)
+            .then
+            .then 
+            .catch
+    }
+    */
 }
-
-
-
-
 
 
 //1 - Ingreso Usuario
