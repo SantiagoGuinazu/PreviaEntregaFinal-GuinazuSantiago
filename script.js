@@ -250,7 +250,6 @@ function lanzarAlert2() {
         icon: 'error',
         title: 'Carrito Vacio',
         text: 'No hay nada en el carrito',
-        footer: '<a href="index.html">Ir a comprar?</a>',
     })
 }
 
