@@ -95,7 +95,7 @@ function mostrarBienvenida(arrayIngresado) {
         usuarioIngresado.classList.remove("oculto")
     } else {
         usuarioIngresado.innerHTML = `
-            <h4>Bienvenido usuario nuevo: ${textLogin.value}</h4>
+            <h4>Bienvenido usuario nuevo ${textLogin.value}</h4>
             `
         usuarioIngresado.classList.remove("oculto")
     }
