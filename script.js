@@ -2,10 +2,8 @@
 console.log("Proyecto Final JS - Guiñazu Santiago")
 
 //E-commerce: Botingold - Compra de Botines
-
 //Inicio miPromgramaPrincipal
 miProgramaPrincipal()
-
 
 //Funcion Inicio miPromgramaPrincipal
 function miProgramaPrincipal() {
@@ -37,37 +35,30 @@ function miProgramaPrincipal() {
         { id: 16, nombre: "vapor", marca: "nike", color: "negro", tapones: "bajos", stock: 7, precio: 15200, rutaImagen: "botin16.png" },
     ]
 
+    //Carrito JSON - Productos
     let carrito = JSON.parse(localStorage.getItem("carrito")) || []
     let contenedor = document.getElementById("productos")
 
-    //Marcas
-    let marca = []
-    for (let producto of productos) {
-        if (!marca.includes(producto.marca)) {
-            marca.push(producto.marca)
-        }
-    }
-
     //1 - Ingreso Usuario
     let botonLogin = document.getElementById("botonLogin")
-    botonLogin.addEventListener("click", mostrarBienvenida)
+    botonLogin.addEventListener("click", () => mostrarBienvenida(usuarios))
 
     //2 - Lista productos
     let botonProductos = document.getElementById("botonProductos")
-    botonProductos.addEventListener("click", listaCompleta)
+    botonProductos.addEventListener("click", (e) => listaCompleta(e, productos, contenedor, carrito))
 
     //3 - Filtro para Adidas y Nike
     let botonesFiltros = document.getElementsByClassName("menuFiltro")
     for (let botonFiltro of botonesFiltros) {
-        botonFiltro.addEventListener("click", filtrarYRenderizarPorMarca)
+        botonFiltro.addEventListener("click", (e) => filtrarYRenderizarPorMarca(e, productos, contenedor, carrito))
     }
 
     //4 - Buscador general
     let buscador = document.getElementById("buscador")
-    buscador.addEventListener("input", filtrar)
+    buscador.addEventListener("input", () => filtrar(productos, buscador, contenedor, carrito))
 
     //5 - Tarjetas para carrito
-    crearTarjetas(productos, contenedor)
+    crearTarjetas(productos, contenedor, carrito)
 
     //6 - Agregar al Carrito - Funcion Interna
 
@@ -107,10 +98,10 @@ function miProgramaPrincipal() {
 
 
 //1 - Ingreso Usuario
-function mostrarBienvenida() {
+function mostrarBienvenida(arrayIngresado) {
     let textLogin = document.getElementById("textLogin")
     let usuarioIngresado = document.getElementById("usuarioIngresado")
-    let usuario = usuarios.find((u) => u.usuario === textLogin.value)
+    let usuario = arrayIngresado.find((u) => u.usuario === textLogin.value)
     
     if (usuario) {
         usuarioIngresado.innerHTML = `
@@ -128,57 +119,55 @@ function mostrarBienvenida() {
 
 
 //2 - Lista productos
-function listaCompleta(e) {
+function listaCompleta(e, arrayProductos, contenedor, carrito) {
     e.preventDefault()
     if (e.which === 1) {
-        let tarjetaProducto = productos.filter(producto => producto.nombre.includes(botonProductos.value))
-        crearTarjetas(tarjetaProducto)
+        let tarjetaProducto = arrayProductos.filter(producto => producto.nombre.includes(botonProductos.value))
+        crearTarjetas(tarjetaProducto, contenedor, carrito)
     }
 }
 
-
 //3 - Filtro para Adidas y Nike
-function filtrarYRenderizarPorMarca(e) {
-    let elementosFiltrados = productos.filter(producto => producto.marca === e.target.value)
-    crearTarjetas(elementosFiltrados)
+function filtrarYRenderizarPorMarca(e, arrayProductos, contenedor, carrito) {
+    let elementosFiltrados = arrayProductos.filter(producto => producto.marca === e.target.value)
+    crearTarjetas(elementosFiltrados, contenedor, carrito)
 }
 
 
 //4 - Buscador general
-function filtrar() {
-    let arrayFiltrado = productos.filter(producto => producto.nombre.includes(buscador.value.toLowerCase()) || producto.marca.includes(buscador.value.toLowerCase()))
-    crearTarjetas(arrayFiltrado)
+function filtrar(arrayProductos, input, contenedor) {
+    let arrayFiltrado = arrayProductos.filter(producto => producto.nombre.includes(input.value.toLowerCase()) || producto.marca.includes(input.value.toLowerCase()))
+    crearTarjetas(arrayFiltrado, contenedor, carrito)
 }
 
 
 //5 - Tarjetas para carrito
-function crearTarjetas(array) {
+function crearTarjetas(arrayProductos, contenedor, carrito) {
     contenedor.innerHTML = ""
-    array.forEach(elemento => {
+    arrayProductos.forEach(({ stock, marca, nombre, rutaImagen, precio, id }) => {
         let producto = document.createElement("div")
-        let mensaje = "Unidades disponibles: " + elemento.stock
+        let mensaje = "Unidades disponibles: " + stock
         producto.className = "tarjetaProducto"
-        if (elemento.stock < 3) {
+        if (stock < 3) {
             mensaje = "Ultimas Unidades"
             producto.classList.add("UltimasUnidades")
         }
         producto.innerHTML = `
-        <h4>${elemento.marca + " - " + elemento.nombre + " - $" + elemento.precio}</h4>
-        <img class="imagen" src="multimedia/${elemento.rutaImagen}">
+        <h4>${marca + " - " + nombre + " - $" + precio}</h4>
+        <img class="imagen" src="multimedia/${rutaImagen}">
         <h4>${mensaje}</h4>
-        <button id=${elemento.id}>Agregar al carrito</button>
+        <button id=${id}>Agregar al carrito</button>
     `
         contenedor.appendChild(producto)
-        let botonAgregarAlCarrito = document.getElementById(elemento.id)
-        botonAgregarAlCarrito.addEventListener("click", agregarAlCarrito)
+        let botonAgregarAlCarrito = document.getElementById(id)
+        botonAgregarAlCarrito.addEventListener("click", () => agregarAlCarrito(arrayProductos, id, carrito))
     })
 }
 
-
 //6 - Agregar a Carrito
-function agregarAlCarrito(e) {
-    let productoBuscado = productos.find(producto => producto.id === Number(e.target.id))
-    let posicionProductoEnCarrito = carrito.findIndex(producto => producto.id === Number(e.target.id))
+function agregarAlCarrito(arrayProductos, id, carrito) {
+    let productoBuscado = arrayProductos.find(producto => producto.id === id)
+    let posicionProductoEnCarrito = carrito.findIndex(producto => producto.id === id)
     
     if (posicionProductoEnCarrito !== -1) {
         carrito[posicionProductoEnCarrito].unidades++
@@ -200,7 +189,7 @@ function agregarAlCarrito(e) {
 }
 
 //7 - Renderizar Carrito
-function renderizarCarrito() {
+function renderizarCarrito(carrito) {
     let carritoTotal = document.getElementById("carrito")
     carritoTotal.innerHTML = `
     <div id=encabezadoCarrito>
@@ -254,7 +243,7 @@ function mostrarOcultarLista() {
 
 
 //10 - Finalizar Compra
-function finalizarCompra() {
+function finalizarCompra(carrito) {
     let carritoFisico = document.getElementById("carrito")
     if (carrito != 0) {
         lanzarAlert()
@@ -263,7 +252,7 @@ function finalizarCompra() {
     }
     carritoFisico.innerHTML = ""
     localStorage.removeItem("carrito")
-    carrito = []
+    carrito = [] 
     renderizarCarrito([])
 }
 
