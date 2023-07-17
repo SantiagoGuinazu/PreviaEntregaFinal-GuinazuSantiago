@@ -69,6 +69,14 @@ function miProgramaPrincipal() {
                     //11 - Funcion Interna SweetAlerts
                     //12 - Funcion Interna Toastify
             })
+            .catch(() =>
+                Swal.fire({
+                    text: 'Error en la base de datos, intente mas tarde',
+                    icon: 'error',
+                    confirmButtonText: 'Ok',
+                    confirmButtonColor: '#003366',
+                })
+        )
     }
 }
 
