@@ -2,6 +2,10 @@
 console.log("Proyecto Final JS - Guiñazu Santiago")
 
 //E-commerce: Botingold - Compra de Botines
+
+//Carrito - Variable Global
+let carrito = JSON.parse(localStorage.getItem("carrito")) || []
+
 //Inicio miPromgramaPrincipal
 miProgramaPrincipal()
 
@@ -35,8 +39,7 @@ function miProgramaPrincipal() {
         { id: 16, nombre: "vapor", marca: "nike", color: "negro", tapones: "bajos", stock: 7, precio: 15200, rutaImagen: "botin16.png" },
     ]
 
-    //Carrito JSON - Productos
-    let carrito = JSON.parse(localStorage.getItem("carrito")) || []
+    //Contenedor productos
     let contenedor = document.getElementById("productos")
 
     //1 - Ingreso Usuario
@@ -45,25 +48,25 @@ function miProgramaPrincipal() {
 
     //2 - Lista productos
     let botonProductos = document.getElementById("botonProductos")
-    botonProductos.addEventListener("click", (e) => listaCompleta(e, productos, contenedor, carrito))
+    botonProductos.addEventListener("click", (e) => listaCompleta(e, productos, contenedor))
 
     //3 - Filtro para Adidas y Nike
     let botonesFiltros = document.getElementsByClassName("menuFiltro")
     for (let botonFiltro of botonesFiltros) {
-        botonFiltro.addEventListener("click", (e) => filtrarYRenderizarPorMarca(e, productos, contenedor, carrito))
+        botonFiltro.addEventListener("click", (e) => filtrarYRenderizarPorMarca(e, productos, contenedor))
     }
 
     //4 - Buscador general
     let buscador = document.getElementById("buscador")
-    buscador.addEventListener("input", () => filtrar(productos, buscador, contenedor, carrito))
+    buscador.addEventListener("input", () => filtrar(productos, buscador, contenedor))
 
     //5 - Tarjetas para carrito
-    crearTarjetas(productos, contenedor, carrito)
+    crearTarjetas(productos, contenedor)
 
     //6 - Agregar al Carrito - Funcion Interna
 
     //7 - Renderizar Carrito
-    renderizarCarrito(carrito)
+    renderizarCarrito()
 
     //8 - Boton Carrito
     let botonCarrito = document.getElementById("botonCarrito")
@@ -75,7 +78,7 @@ function miProgramaPrincipal() {
 
     //10 - Finalizar Compra
     let botonFinalizarCompra = document.getElementById("finalizarCompra")
-    botonFinalizarCompra.addEventListener("click", () => finalizarCompra(carrito))
+    botonFinalizarCompra.addEventListener("click", () => finalizarCompra())
 
     //11 - Funcion Interna SweetAlerts
     
@@ -119,30 +122,31 @@ function mostrarBienvenida(arrayIngresado) {
 
 
 //2 - Lista productos
-function listaCompleta(e, arrayProductos, contenedor, carrito) {
+function listaCompleta(e, arrayProductos, contenedor) {
     e.preventDefault()
     if (e.which === 1) {
         let tarjetaProducto = arrayProductos.filter(producto => producto.nombre.includes(botonProductos.value))
-        crearTarjetas(tarjetaProducto, contenedor, carrito)
+        crearTarjetas(tarjetaProducto, contenedor)
     }
 }
 
+
 //3 - Filtro para Adidas y Nike
-function filtrarYRenderizarPorMarca(e, arrayProductos, contenedor, carrito) {
+function filtrarYRenderizarPorMarca(e, arrayProductos, contenedor) {
     let elementosFiltrados = arrayProductos.filter(producto => producto.marca === e.target.value)
-    crearTarjetas(elementosFiltrados, contenedor, carrito)
+    crearTarjetas(elementosFiltrados, contenedor)
 }
 
 
 //4 - Buscador general
 function filtrar(arrayProductos, input, contenedor) {
     let arrayFiltrado = arrayProductos.filter(producto => producto.nombre.includes(input.value.toLowerCase()) || producto.marca.includes(input.value.toLowerCase()))
-    crearTarjetas(arrayFiltrado, contenedor, carrito)
+    crearTarjetas(arrayFiltrado, contenedor)
 }
 
 
 //5 - Tarjetas para carrito
-function crearTarjetas(arrayProductos, contenedor, carrito) {
+function crearTarjetas(arrayProductos, contenedor) {
     contenedor.innerHTML = ""
     arrayProductos.forEach(({ stock, marca, nombre, rutaImagen, precio, id }) => {
         let producto = document.createElement("div")
@@ -160,12 +164,13 @@ function crearTarjetas(arrayProductos, contenedor, carrito) {
     `
         contenedor.appendChild(producto)
         let botonAgregarAlCarrito = document.getElementById(id)
-        botonAgregarAlCarrito.addEventListener("click", () => agregarAlCarrito(arrayProductos, id, carrito))
+        botonAgregarAlCarrito.addEventListener("click", () => agregarAlCarrito(arrayProductos, id))
     })
 }
 
+
 //6 - Agregar a Carrito
-function agregarAlCarrito(arrayProductos, id, carrito) {
+function agregarAlCarrito(arrayProductos, id) {
     let productoBuscado = arrayProductos.find(producto => producto.id === id)
     let posicionProductoEnCarrito = carrito.findIndex(producto => producto.id === id)
     
@@ -184,12 +189,13 @@ function agregarAlCarrito(arrayProductos, id, carrito) {
         })
     }
     localStorage.setItem("carrito", JSON.stringify(carrito))
-    renderizarCarrito(carrito)
+    renderizarCarrito()
     lanzarTostada()
 }
 
+
 //7 - Renderizar Carrito
-function renderizarCarrito(carrito) {
+function renderizarCarrito() {
     let carritoTotal = document.getElementById("carrito")
     carritoTotal.innerHTML = `
     <div id=encabezadoCarrito>
@@ -202,16 +208,16 @@ function renderizarCarrito(carrito) {
     </div>
     `
 
-    carrito.forEach(producto => {
+    carrito.forEach(({ marca, nombre, rutaImagen, precioUnitario, unidades, subtotal }) => {
         let elementoDelCarrito = document.createElement("div")
         elementoDelCarrito.classList.add("elementoDelCarrito")
         elementoDelCarrito.innerHTML = `
-        <img class="imagenProducto" src="multimedia/${producto.rutaImagen}">
-        <p>${producto.marca}</p>
-        <p>${producto.nombre}</p>
-        <p>${producto.precioUnitario}</p>
-        <p>${producto.unidades}</p>
-        <p>${producto.subtotal}</p>
+        <img class="imagenProducto" src="multimedia/${rutaImagen}">
+        <p>${marca}</p>
+        <p>${nombre}</p>
+        <p>${precioUnitario}</p>
+        <p>${unidades}</p>
+        <p>${subtotal}</p>
         `
         carritoTotal.appendChild(elementoDelCarrito)
     })
@@ -233,7 +239,6 @@ function mostrarOcultar() {
 }
 
 
-
 //9 - Boton Lista productos e Inicio
 function mostrarOcultarLista() {
     let inicio = document.getElementById("inicio")
@@ -241,9 +246,8 @@ function mostrarOcultarLista() {
 }
 
 
-
 //10 - Finalizar Compra
-function finalizarCompra(carrito) {
+function finalizarCompra() {
     let carritoFisico = document.getElementById("carrito")
     if (carrito != 0) {
         lanzarAlert()
@@ -274,6 +278,7 @@ function lanzarAlert2() {
         footer: '<a href="index.html">Ir a comprar?</a>',
     })
 }
+
 
 //12 - Toastify
 function lanzarTostada() {
